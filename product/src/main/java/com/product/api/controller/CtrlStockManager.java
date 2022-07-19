@@ -1,0 +1,43 @@
+package com.product.api.controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.product.api.dto.ApiResponse;
+import com.product.api.dto.DtoProduct;
+import com.product.api.entity.Product;
+import com.product.api.service.SvcProduct;
+import com.product.api.service.SvcStockManager;
+import com.product.exception.ApiException;
+
+@RestController
+@RequestMapping("/manage")
+public class CtrlStockManager {
+	
+	@Autowired
+	SvcStockManager svc;
+	
+	@PostMapping
+	public ResponseEntity<ApiResponse> updateProduct(@Valid @RequestBody List<DtoProduct> in, BindingResult bindingResult){
+		if(bindingResult.hasErrors())
+			throw new ApiException(HttpStatus.BAD_REQUEST, bindingResult.getAllErrors().get(0).getDefaultMessage());
+		return new ResponseEntity<ApiResponse>(svc.updateProducts(in), HttpStatus.OK);
+		
+	}
+	
+	
+
+}
